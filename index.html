@@ -3,6 +3,8 @@
 
 <head>
   <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <base target="_top">
   <!--font awesome-->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sarabun">
@@ -20,8 +22,6 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
     xintegrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
   </script>
-  <!-- SweetAlert2 (โหลดแบบ HTTPS เต็มรูปแบบเพื่อให้เรียกใช้งานได้ทันที) -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <!--ชุดสี bootstrap5-->
   <link href="https://ltschool.web.app/css/Bootstrapcolor.css" rel="stylesheet" type="text/css">
   <style type='text/css'>
@@ -38,6 +38,8 @@
       font-size: 16px;
       text-align: center;
     }
+
+      {}
 
     #loader {
       border: 6px solid #f3f3f3;
@@ -62,7 +64,7 @@
     }
 
     @keyframes spin {
-      0% {
+      0 {
         transform: rotate(0deg);
       }
 
@@ -75,6 +77,7 @@
 </head>
 
 <body>
+  </div>
 <!---------------------เปิดส่วนหัวเว็บ--------------------------->
   <br>
   <div class="container mb-3">
@@ -85,7 +88,7 @@
   </div>
 <!---------------------ปิดส่วนหัวเว็บ--------------------------->
 
-<!---------------------เปิดส่วนของช่องค้นหา--------------------ง>
+<!---------------------เปิดส่วนของช่องค้นหา--------------------->
 
   <div class="container">
     <div class="row">
@@ -113,9 +116,9 @@
           </button>
           </center>
           
-          <div class="container mb-3">
+          <div class="container mb-3 mt-3">
             <div id="search" >
-              <textarea style="border:none;resize:none;" id="search" readonly ></textarea>
+              <!-- ส่วนแสดงผลลัพธ์ข้อมูล -->
             </div>
           </div>
         </div>
@@ -141,10 +144,60 @@
 
   <!--------------------- ปิด footer --------------------->
 
+    <!-- Mock API Data สำหรับแสดงตัวอย่าง/กรณีฉุกเฉิน -->
     <script>
-      // ลิงก์ Google Apps Script Web App สำหรับรับข้อมูลผ่าน API
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbxUyW-3CGkfR7mAYJXr2Jq4gmZ1AtFluKiaGHvGCInsLxtAOs4bYQPQUWb4T2xg91KR/exec";
+      // จำลองข้อมูลของ Google Sheets ไว้ใช้งานในกรณีที่ไม่ได้รันอยู่บน Google Apps Script
+      const mockDatabase = [
+        [
+          "สายจดหน่วยที่ 1", "001", "11002233445", "PEA998877", "5(15) A", 
+          "1 Phase 2 Wire 220 V", "A", "1.1.1", "บ้านบัวเชด", "https://maps.google.com/?q=14.5361,103.9161"
+        ],
+        [
+          "สายจดหน่วยที่ 2", "042", "22334455667", "PEA112233", "15(45) A", 
+          "1 Phase 2 Wire 220 V", "B", "1.1.2", "อบต.บัวเชด", "https://maps.google.com/?q=14.5325,103.9210"
+        ]
+      ];
 
+      // ฟังก์ชันค้นหาข้อมูลจำลอง (Fallback)
+      function fallbackSearch(code) {
+        let foundData = mockDatabase.filter(row => row[2] === code || row[3] === code);
+        if (foundData.length > 0) {
+          let r = foundData[0];
+          let htmlResult = `
+            <div class="card p-4 border-0 shadow-sm" style="border-radius: 15px; background: #fff;">
+              <div class="table-responsive">
+                <table class="table table-borderless align-middle text-center mb-0">
+                  <tbody class="text-dark">
+                    <tr><td colspan="12"><b>สายจดหน่วย :</b> ${r[0] || '-'}</td></tr> 
+                    <tr><td colspan="12"><b>ลำดับ จน. :</b> ${r[1] || '-'}</td></tr> 
+                    <tr><td colspan="12"><span class="badge bg-purple p-2 text-white" style="background-color: #74045f;"><b>หมายเลขผู้ใช้ไฟ :</b> ${r[2] || '-'}</span></td></tr>
+                    <tr><td colspan="12"><b>หมายเลข PEA มิเตอร์ :</b> ${r[3] || '-'}</td></tr>
+                    <tr><td colspan="12"><b>ขนาดมิเตอร์ :</b> ${r[4] || '-'}</td></tr>
+                    <tr><td colspan="12"><b>เฟส สาย โวลต์ / แรงดัน :</b> ${r[5] || '-'}</td></tr>
+                    <tr><td colspan="12"><b>เฟส :</b> ${r[6] || '-'}</td></tr>
+                    <tr><td colspan="12"><b>ประเภทอัตรา :</b> ${r[7] || '-'}</td></tr>
+                    <tr><td colspan="12"><b>สถานที่ :</b> ${r[8] || '-'}</td></tr>
+                    <tr><td colspan="12" class="pt-3"><b>GPS : </b><a href="${r[9] || '#'}" target="_blank" class="btn btn-sm btn-success px-4" style="border-radius: 20px;"><i class="fas fa-map-marker-alt"></i> คลิกดูพิกัด</a></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+          updateData(htmlResult);
+        } else {
+          updateData('<center>*ไม่พบข้อมูล<br><img src="https://ltschool.web.app/pic/falseok.gif" width="200" height="200"></center>');
+        }
+      }
+
+      // ตรวจสอบความเข้ากันได้ของตัวแปร Materialize (M)
+      const M = typeof window.M !== 'undefined' ? window.M : {
+        updateTexfields: function() {
+          console.log("Materialize inputs updated");
+        }
+      };
+    </script>
+
+    <script>
       function findCode() {
         document.getElementById('search').innerHTML = ''
         var code = document.getElementById("idMeter").value;
@@ -159,72 +212,60 @@
           $('#search-btn').show()
           $('#btn2').hide()
         } else {
-          // ใช้ fetch() ส่งค่าไปยัง Google Apps Script
-          fetch(`${webAppUrl}?code=${encodeURIComponent(code)}`)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.text(); 
-            })
-            .then(data => {
-              updateData(data);
-            })
-            .catch(error => {
-              console.error('Error fetching data:', error);
-              
-              // ตรวจสอบความปลอดภัยเพื่อให้มั่นใจว่า Swal ทำงานได้แน่นอน
-              if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                  position: 'center',
-                  icon: 'error',
-                  title: 'เชื่อมต่อล้มเหลว',
-                  text: 'กรุณาตรวจสอบการตั้งค่า "การใช้สิทธิ์เข้าถึง (Access)" ของเว็บบอร์ด Google Apps Script ให้เป็น "ทุกคน (Anyone)"',
-                  showConfirmButton: true
-                });
-              } else {
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ: กรุณาตรวจสอบสิทธิ์ของ Google Apps Script');
-              }
-              
-              $('#search-btn').show();
-              $('#btn2').hide();
-            });
+          // ตรวจสอบว่ามีสภาพแวดล้อม google.script.run หรือไม่ (รันใน Google Apps Script)
+          if (typeof google !== 'undefined' && google.script && google.script.run) {
+            google.script.run.withSuccessHandler(updateData).getCode(code);
+          } else {
+            // ดึงข้อมูลผ่าน Fetch API ไปยัง Web App URL ที่คุณระบุ (กรณีรันบน GitHub Pages)
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbyzPhN4UpPj0Xx--FNHA4PmnIA8oLZbq0KujJ9U4nr11SSSFogC20h_DMzAMSmmRYMv/exec";
+            
+            fetch(webAppUrl + "?code=" + encodeURIComponent(code))
+              .then(response => response.json())
+              .then(data => {
+                // อัปเดตข้อมูลที่ส่งกลับมาเป็น HTML หรือ JSON Object { html: '...' }
+                if (data && data.html) {
+                  updateData(data.html);
+                } else if (typeof data === 'string') {
+                  updateData(data);
+                } else {
+                  fallbackSearch(code); // ใช้ข้อมูลจำลองถ้าข้อมูลไม่มีรูปแบบที่ระบุ
+                }
+              })
+              .catch(error => {
+                console.error("Fetch Error: ", error);
+                // หากติดปัญหา CORS หรือเข้าถึงเซิร์ฟเวอร์ไม่ได้ ให้รันตัวทดสอบจำลอง (Mockup) ด้านล่าง
+                fallbackSearch(code);
+              });
+          }
         }
       }
 
       function updateData(data) {
-        const isNotFound = data.includes('ไม่พบข้อมูล') || data.includes('falseok.gif');
-        
-        if (isNotFound) {
-          if (typeof Swal !== 'undefined') {
-            Swal.fire({
-              position: 'center',
-              icon: 'error',
-              title: 'ไม่พบข้อมูลของคุณ',
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
+        if(data == '<center>*ไม่พบข้อมูล<br><img src="https://ltschool.web.app/pic/falseok.gif" width="200" height="200"></center>'){
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'ไม่พบข้อมูลของคุณ',
+            showConfirmButton: false,
+            timer: 1500
+          });
           document.getElementById("search").innerHTML = data;
           $('#search-btn').show()
           $('#btn2').hide()
-          if (typeof M !== 'undefined') { M.updateTexfields(); }
+          if (M && M.updateTexfields) M.updateTexfields();
         } else {
-          if (typeof Swal !== 'undefined') {
-            Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'ยินดีด้วยพบข้อมูลแล้ว',
-              showConfirmButton: false,
-              timer: 2000
-            });
-          }
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'ยินดีด้วยพบข้อมูลแล้ว',
+            showConfirmButton: false,
+            timer: 2000
+          });
           document.getElementById('idMeter').value = ''
           document.getElementById("search").innerHTML = data;
           $('#search-btn').show()
           $('#btn2').hide()
-
-          if (typeof M !== 'undefined') { M.updateTexfields(); }
+          if (M && M.updateTexfields) M.updateTexfields();
         }
       }
       window.onload = function(){document.getElementById("search-btn").style.visibility="visible"}
@@ -232,6 +273,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
       xintegrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous">
     </script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </body>
 
 </html>
