@@ -228,7 +228,7 @@
             google.script.run.withSuccessHandler(updateData).getCode(code);
           } else {
             // กรณีรันนอก Apps Script (เช่น GitHub Pages) ดึงผ่าน Web App URL
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbx_-aNeFEDznU7TGOtBoBHN8VknL3SBZ063u7lV4EJ-v8yKk-B2abicsX8L9Z-vEH8/exec";
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbwequbN3p1x3uKmML0J3zqPImPO7VYNPcEHspVtPm9npbourTnlUga3guemqMGxGDKb/exec";
             
             fetch(webAppUrl + "?code=" + encodeURIComponent(code))
               .then(response => response.json())
