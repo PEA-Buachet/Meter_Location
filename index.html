@@ -273,8 +273,12 @@
           </div>
         `;
         document.getElementById("search").innerHTML = notFoundHtml;
-        $('#search-btn').show()
-        $('#btn2').hide()
+        $('#search-btn').show();
+        $('#btn2').hide();
+        
+        // ล้างค่าในช่องกรอกหมายเลขมิเตอร์เมื่อไม่พบข้อมูล
+        document.getElementById('idMeter').value = '';
+        
         if (M && M.updateTexfields) M.updateTexfields();
       }
 
