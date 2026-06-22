@@ -1,251 +1,237 @@
 <!doctype html>
-<html lang="th">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบค้นหาพิกัดมิเตอร์ กฟส.บัวเชด</title>
-  
-  <!-- Fonts -->
+  <!-- Required meta tags -->
+  <base target="_top">
+  <!--font awesome-->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sarabun">
-  
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
-  
-  <!-- jQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  
-  <!-- ชุดสี bootstrap5 -->
+  <!-- Font Awesome CSS -->
+  <script src="https://kit.fontawesome.com/6a972cf3a7.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    xintegrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    xintegrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous"></script>
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+    xintegrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    xintegrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+  </script>
+  <!-- SweetAlert2 (โหลดแบบ HTTPS เต็มรูปแบบเพื่อให้เรียกใช้งานได้ทันที) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <!--ชุดสี bootstrap5-->
   <link href="https://ltschool.web.app/css/Bootstrapcolor.css" rel="stylesheet" type="text/css">
-  
   <style type='text/css'>
+    @font-face {
+      font-family: 'Sarabun';
+    }
+
     body {
-      font-family: 'Sarabun', sans-serif !important;
-      background-color: #f8f9fa;
+      font-family: 'Sarabun' !important;
     }
 
     ::placeholder {
-      color: #dfb2d4 !important;
+      color: peachpuff;
       font-size: 16px;
       text-align: center;
     }
 
-    /* ตกแต่งส่วนหัว */
-    .header-nav {
-      border-radius: 20px;
-      box-shadow: 0 8px 16px rgba(116, 4, 95, 0.15);
-      background-image: linear-gradient(135deg, #74045f 0%, #a11488 100%);
+    #loader {
+      border: 6px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 6px solid #000000;
+      border-bottom: 6px solid #000000;
+      width: 40px;
+      height: 40px;
+      -webkit-animation: spin 0.5s linear infinite;
+      animation: spin 0.5s linear infinite;
+      visibility: hidden;
     }
 
-    /* ตกแต่งการ์ด */
-    .search-card {
-      border: none;
-      border-radius: 18px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-      background: #ffffff;
-      transition: all 0.3s ease;
+    @-webkit-keyframes spin {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
     }
 
-    /* ปุ่มค้นหา */
-    .btn-search {
-      border-radius: 12px;
-      box-shadow: 0 6px 12px rgba(199, 145, 27, 0.25);
-      background-image: linear-gradient(135deg, #c7911b 0%, #e3ab34 100%);
-      border: none;
-      padding: 12px 35px;
-      font-size: 1.1rem;
-      transition: transform 0.2s;
-    }
-    .btn-search:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 16px rgba(199, 145, 27, 0.35);
-    }
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
 
-    /* ส่วนแสดงผลข้อมูล */
-    #search-result {
-      min-height: 50px;
-      border-radius: 12px;
-      padding: 15px;
-      background-color: #ffffff;
-      border: 1px solid #e3e6f0;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
+
 </head>
 
 <body>
-  
-  <!-- ส่วนหัวของเว็บ -->
-  <div class="container my-4">
-    <nav class="navbar navbar-dark header-nav p-3">
-      <div class="container-fluid justify-content-center">
-        <span class="navbar-brand text-center m-0 fs-4 fw-bold">
-          <i class="fas fa-search-location me-2"></i> ระบบค้นหาพิกัดมิเตอร์ภายใน กฟส.บัวเชด
-        </span>
-      </div>
+<!---------------------เปิดส่วนหัวเว็บ--------------------------->
+  <br>
+  <div class="container mb-3">
+    <nav class="navbar navbar-expand-lg navbar-dark bd-blue-500 " style="border-radius: 25px; box-shadow: 0 10px 10px rgb(0 0 0 / 10%);background-image: linear-gradient(to right top, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f);">
+        <a class="navbar-brand"></a>
+        <span class="navbar-brand flex-grow-1 text-center"><i class="fas fa-search"></i> ระบบค้นหาพิกัดมิเตอร์ภายใน กฟส.บัวเชด</span>
     </nav>
   </div>
+<!---------------------ปิดส่วนหัวเว็บ--------------------------->
 
-  <!-- ส่วนของช่องค้นหาและแสดงผล -->
-  <div class="container mb-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8 col-lg-6">
-        
-        <!-- การ์ดค้นหา -->
-        <div class="card search-card p-4 mb-4">
-          <div class="card-body">
-            <div class="mb-3">
-              <label for="idMeter" class="form-label text-muted fw-bold d-block text-center mb-3">กรอกหมายเลขผู้ใช้ไฟฟ้า 11 หลัก หรือหมายเลขมิเตอร์</label>
-              <input class="form-control form-control-lg border-2 text-center" 
-                     type="text" 
-                     id="idMeter" 
-                     placeholder="เช่น 02000xxxxxx หรือเลขมิเตอร์" 
-                     maxlength="15" 
-                     required>
-            </div>
-            
-            <div id="output" class="text-center"></div>
-            
-            <div class="text-center mt-4">
-              <!-- ปุ่มกดค้นหาปกติ -->
-              <button type="button" class="btn btn-search text-white fw-bold" id="search-btn" onclick="findCode()">
-                <i class="fas fa-search me-2"></i> ค้นหาข้อมูล
-              </button>
+<!---------------------เปิดส่วนของช่องค้นหา--------------------ง>
 
-              <!-- ปุ่มกำลังดาวน์โหลด/ค้นหา -->
-              <button class="btn btn-warning text-dark fw-bold" type="button" disabled id="btn-loading" style="display:none; border-radius: 12px; padding: 12px 35px;">
-                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                กำลังค้นหาข้อมูล...
-              </button>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+          <div class="card text-center">
+            <!-- <div class="card-body"> -->
+              <div class="card border-blue-500">
+                      <div class="card-body" style="box-shadow: 0 10px 10px rgb(0 0 0 / 10%);">
+                <input class="form-control form-control-lg" type="text" id="idMeter" style="text-align: center;"placeholder="กรอกหมายเลขผู้ใช้ไฟฟ้า 11หลัก หรือหมายเลขมิเตอร์" maxlength="12" required>
+                <div id="output" class="mt-3"></div>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- การ์ดแสดงผลลัพธ์ -->
-        <div class="card search-card p-4">
-          <h5 class="text-muted mb-3"><i class="fas fa-info-circle me-2"></i>ผลลัพธ์การค้นหา:</h5>
-          <div id="search-result" class="text-center text-muted">
-            กรุณากรอกข้อมูลและกดปุ่มค้นหาเพื่อแสดงพิกัดแผนที่มิเตอร์
-          </div>
-        </div>
-
       </div>
-    </div>
-  </div>
+      <div class="row">
+        <div class="col-md-6 mx-auto">
+          <center>
+            <button type="button"  class ="btn bd-blue-500 btn-lg text-white mt-3" id="search-btn" onclick ="findCode()" style="visibility: visible;box-shadow: 0 10px 10px rgb( 0 0 / 10%); background-image: linear-gradient(to right top, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b);">
+              <i class="fas fa-search"></i> ค้นหา</button>
 
-  <!-- ส่วนของ Footer -->
-  <div class="container my-4">
-    <nav class="navbar navbar-dark header-nav p-2">
-      <div class="container-fluid justify-content-center">
-        <span class="navbar-brand text-center m-0" style="font-size: 0.9rem;">
-          © Copyright 2025 (V.4 - GitHub Version): PEA Buachet
-        </span>
-      </div>
-    </nav> 
-  </div>
-
-  <script>
-    // URL ของ Google Apps Script Web App ที่เปิดเป็น Public (Anyone)
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbykvcZP0xErwkuAVmzZtUna9KLy5AjqXBTOrSV0Uj8AHqY23K1goS2rovNhlj9BP93o/exec";
-
-    function findCode() {
-      const codeInput = document.getElementById("idMeter");
-      const codeValue = codeInput.value.trim();
-      const outputDiv = document.getElementById("output");
-      const resultDiv = document.getElementById("search-result");
-
-      // เคลียร์ค่าผลลัพธ์เดิมก่อน
-      resultDiv.innerHTML = '<span class="text-muted">กำลังดึงข้อมูล...</span>';
-      outputDiv.innerHTML = '';
-
-      if (codeValue === "") {
-        outputDiv.innerHTML = "<div class='alert alert-danger py-2' role='alert'><i class='fas fa-exclamation-circle me-1'></i> กรุณาพิมพ์หมายเลขมิเตอร์หรือหมายเลขผู้ใช้ไฟฟ้า</div>";
-        resultDiv.innerHTML = '<span class="text-muted">กรุณากรอกข้อมูลและกดปุ่มค้นหาเพื่อแสดงพิกัดแผนที่มิเตอร์</span>';
-        
-        setTimeout(function() {
-          outputDiv.innerHTML = ""; 
-        }, 3000);  
-        return;
-      }
-
-      // แสดงปุ่ม Loading และซ่อนปุ่มค้นหาปกติ
-      $('#search-btn').hide();
-      $('#btn-loading').show();
-
-      // การยิง Fetch API ไปยัง Web App URL ที่คุณกำหนดไว้
-      // และใช้พารามิเตอร์แบบ GET เพื่อส่งค่ารหัสที่ค้นหา
-      const targetUrl = `${WEB_APP_URL}?code=${encodeURIComponent(codeValue)}`;
-
-      fetch(targetUrl)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.text(); // เนื่องจาก Google Script มักคืนค่าผลลัพธ์เป็น HTML string
-        })
-        .then(htmlData => {
-          updateData(htmlData);
-        })
-        .catch(error => {
-          console.error("Error fetching data:", error);
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์',
-            text: 'โปรดตรวจสอบสิทธิ์การแชร์ของ Google Apps Script Web App',
-            showConfirmButton: true
-          });
+          <button class="btn bd-orange-500  mt-3 btn-lg" type="button" disabled id="btn2" style="display:none">
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            กำลังค้นหา
+          </button>
+          </center>
           
-          resultDiv.innerHTML = '<span class="text-danger"><i class="fas fa-exclamation-triangle"></i> ไม่สามารถดึงข้อมูลได้ โปรดลองอีกครั้งภายหลัง</span>';
-          $('#search-btn').show();
-          $('#btn-loading').hide();
-        });
-    }
+          <div class="container mb-3">
+            <div id="search" >
+              <textarea style="border:none;resize:none;" id="search" readonly ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+    <div  id="showData"></div>
+        </div>
 
-    function updateData(data) {
-      const resultDiv = document.getElementById("search-result");
-      const codeInput = document.getElementById("idMeter");
+<!-------------------ปิดส่วนของช่องค้นหา----------------------->
 
-      // ตรวจสอบเงื่อนไขว่าไม่พบข้อมูลตามหน้าเดิม
-      if (data.includes('ไม่พบข้อมูล') || data.includes('falseok.gif')) {
-        Swal.fire({
-          position: 'center',
-          icon: 'error',
-          title: 'ไม่พบข้อมูลของคุณ',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        resultDiv.innerHTML = data;
-      } else {
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: 'ยินดีด้วยพบข้อมูลแล้ว',
-          showConfirmButton: false,
-          timer: 2000
-        });
-        codeInput.value = ''; // เคลียร์ช่องค้นหาเมื่อพบข้อมูลเรียบร้อย
-        resultDiv.innerHTML = data;
+
+<!-------------------- เปิด footer ------------------------->
+
+<!-- Grid container -->
+<div class="container mb-3">
+    <nav class="navbar navbar-expand-lg navbar-dark bd-blue-500" style="border-radius: 25px; box-shadow: 0 10px 10px rgb(0 0 0 / 10%); background-image: linear-gradient(to right top, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f);">     
+        <a class="navbar-brand"></a>  
+        <span class="navbar-brand flex-grow-1 text-center" style="font-size: 100%"> © Copyright 2025 (V.3): PEA Buachet</span>
+    </nav> 
+    
+  </div>
+
+
+  <!--------------------- ปิด footer --------------------->
+
+    <script>
+      // ลิงก์ Google Apps Script Web App สำหรับรับข้อมูลผ่าน API
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbxUyW-3CGkfR7mAYJXr2Jq4gmZ1AtFluKiaGHvGCInsLxtAOs4bYQPQUWb4T2xg91KR/exec";
+
+      function findCode() {
+        document.getElementById('search').innerHTML = ''
+        var code = document.getElementById("idMeter").value;
+        $('#search-btn').hide()
+        $('#btn2').show()
+
+        if(document.getElementById('idMeter').value == "" ){
+          document.getElementById("output").innerHTML = "<div class='alert alert-danger' role='alert'>กรุณาพิมพ์หมายเลขมิเตอร์</div>";
+          setTimeout(function(){
+            document.getElementById('output').innerHTML= ""; 
+          }, 1500);  
+          $('#search-btn').show()
+          $('#btn2').hide()
+        } else {
+          // ใช้ fetch() ส่งค่าไปยัง Google Apps Script
+          fetch(`${webAppUrl}?code=${encodeURIComponent(code)}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.text(); 
+            })
+            .then(data => {
+              updateData(data);
+            })
+            .catch(error => {
+              console.error('Error fetching data:', error);
+              
+              // ตรวจสอบความปลอดภัยเพื่อให้มั่นใจว่า Swal ทำงานได้แน่นอน
+              if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                  position: 'center',
+                  icon: 'error',
+                  title: 'เชื่อมต่อล้มเหลว',
+                  text: 'กรุณาตรวจสอบการตั้งค่า "การใช้สิทธิ์เข้าถึง (Access)" ของเว็บบอร์ด Google Apps Script ให้เป็น "ทุกคน (Anyone)"',
+                  showConfirmButton: true
+                });
+              } else {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ: กรุณาตรวจสอบสิทธิ์ของ Google Apps Script');
+              }
+              
+              $('#search-btn').show();
+              $('#btn2').hide();
+            });
+        }
       }
 
-      // สลับปุ่มค้นหากลับมา
-      $('#search-btn').show();
-      $('#btn-loading').hide();
-    }
+      function updateData(data) {
+        const isNotFound = data.includes('ไม่พบข้อมูล') || data.includes('falseok.gif');
+        
+        if (isNotFound) {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: 'ไม่พบข้อมูลของคุณ',
+              showConfirmButton: false,
+              timer: 1500
+            });
+          }
+          document.getElementById("search").innerHTML = data;
+          $('#search-btn').show()
+          $('#btn2').hide()
+          if (typeof M !== 'undefined') { M.updateTexfields(); }
+        } else {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'ยินดีด้วยพบข้อมูลแล้ว',
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+          document.getElementById('idMeter').value = ''
+          document.getElementById("search").innerHTML = data;
+          $('#search-btn').show()
+          $('#btn2').hide()
 
-    // กำหนดให้ปุ่มค้นหาแสดงอยู่เสมอเมื่อโหลดหน้าเสร็จ
-    window.onload = function() {
-      document.getElementById("search-btn").style.visibility = "visible";
-    }
-  </script>
-
-  <!-- Bootstrap Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- SweetAlert2 -->
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+          if (typeof M !== 'undefined') { M.updateTexfields(); }
+        }
+      }
+      window.onload = function(){document.getElementById("search-btn").style.visibility="visible"}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
+      xintegrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous">
+    </script>
 </body>
 
 </html>
