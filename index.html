@@ -39,8 +39,6 @@
       text-align: center;
     }
 
-      {}
-
     #loader {
       border: 6px solid #f3f3f3;
       border-radius: 50%;
@@ -64,7 +62,7 @@
     }
 
     @keyframes spin {
-      0 {
+      0% {
         transform: rotate(0deg);
       }
 
@@ -77,7 +75,6 @@
 </head>
 
 <body>
-  </div>
 <!---------------------เปิดส่วนหัวเว็บ--------------------------->
   <br>
   <div class="container mb-3">
@@ -94,12 +91,11 @@
     <div class="row">
         <div class="col-md-6 mx-auto">
           <div class="card text-center">
-            <!-- <div class="card-body"> -->
               <div class="card border-blue-500">
-                      <div class="card-body" style="box-shadow: 0 10px 10px rgb(0 0 0 / 10%);">
-                <input class="form-control form-control-lg" type="text" id="idMeter" style="text-align: center;"placeholder="กรอกหมายเลขผู้ใช้ไฟฟ้า 11หลัก หรือหมายเลขมิเตอร์" maxlength="12" required>
-                <div id="output" class="mt-3"></div>
-              </div>
+                <div class="card-body" style="box-shadow: 0 10px 10px rgb(0 0 0 / 10%);">
+                  <input class="form-control form-control-lg" type="text" id="idMeter" style="text-align: center;" placeholder="กรอกหมายเลขผู้ใช้ไฟฟ้า 11หลัก หรือหมายเลขมิเตอร์" maxlength="12" required>
+                  <div id="output" class="mt-3"></div>
+                </div>
             </div>
           </div>
         </div>
@@ -107,46 +103,42 @@
       <div class="row">
         <div class="col-md-6 mx-auto">
           <center>
-            <button type="button"  class ="btn bd-blue-500 btn-lg text-white mt-3" id="search-btn" onclick ="findCode()" style="visibility: visible;box-shadow: 0 10px 10px rgb( 0 0 / 10%); background-image: linear-gradient(to right top, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b);">
+            <button type="button" class="btn bd-blue-500 btn-lg text-white mt-3" id="search-btn" onclick="findCode()" style="visibility: visible;box-shadow: 0 10px 10px rgb( 0 0 / 10%); background-image: linear-gradient(to right top, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b);">
               <i class="fas fa-search"></i> ค้นหา</button>
 
-          <button class="btn bd-orange-500  mt-3 btn-lg" type="button" disabled id="btn2" style="display:none">
-          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <button class="btn bd-orange-500 mt-3 btn-lg" type="button" disabled id="btn2" style="display:none">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             กำลังค้นหา
           </button>
           </center>
           
           <div class="container mb-3 mt-3">
-            <div id="search" >
+            <div id="search">
               <!-- ส่วนแสดงผลลัพธ์ข้อมูล -->
             </div>
           </div>
         </div>
       </div>
     
-    <div  id="showData"></div>
-        </div>
+      <div id="showData"></div>
+  </div>
 
 <!-------------------ปิดส่วนของช่องค้นหา----------------------->
 
 
 <!-------------------- เปิด footer ------------------------->
 
-<!-- Grid container -->
 <div class="container mb-3">
     <nav class="navbar navbar-expand-lg navbar-dark bd-blue-500" style="border-radius: 25px; box-shadow: 0 10px 10px rgb(0 0 0 / 10%); background-image: linear-gradient(to right top, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f);">     
         <a class="navbar-brand"></a>  
         <span class="navbar-brand flex-grow-1 text-center" style="font-size: 100%"> © Copyright 2025 (V.3): PEA Buachet</span>
     </nav> 
-    
-  </div>
+</div>
 
-
-  <!--------------------- ปิด footer --------------------->
+<!--------------------- ปิด footer --------------------->
 
     <!-- Mock API Data สำหรับแสดงตัวอย่าง/กรณีฉุกเฉิน -->
     <script>
-      // จำลองข้อมูลของ Google Sheets ไว้ใช้งานในกรณีที่ไม่ได้รันอยู่บน Google Apps Script
       const mockDatabase = [
         [
           "สายจดหน่วยที่ 1", "001", "11002233445", "PEA998877", "5(15) A", 
@@ -185,11 +177,11 @@
           `;
           updateData(htmlResult);
         } else {
-          updateData('<center>*ไม่พบข้อมูล<br><img src="https://ltschool.web.app/pic/falseok.gif" width="200" height="200"></center>');
+          // หากไม่พบข้อมูล ให้เรียกใช้รูปแบบแสดงผลไม่พบข้อมูล
+          updateNotFound();
         }
       }
 
-      // ตรวจสอบความเข้ากันได้ของตัวแปร Materialize (M)
       const M = typeof window.M !== 'undefined' ? window.M : {
         updateTexfields: function() {
           console.log("Materialize inputs updated");
@@ -212,47 +204,62 @@
           $('#search-btn').show()
           $('#btn2').hide()
         } else {
-          // ตรวจสอบว่ามีสภาพแวดล้อม google.script.run หรือไม่ (รันใน Google Apps Script)
+          // ตรวจสอบสภาพแวดล้อม Google Apps Script
           if (typeof google !== 'undefined' && google.script && google.script.run) {
             google.script.run.withSuccessHandler(updateData).getCode(code);
           } else {
-            // ดึงข้อมูลผ่าน Fetch API ไปยัง Web App URL ที่คุณระบุ (กรณีรันบน GitHub Pages)
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbyzPhN4UpPj0Xx--FNHA4PmnIA8oLZbq0KujJ9U4nr11SSSFogC20h_DMzAMSmmRYMv/exec";
+            // กรณีรันนอก Apps Script (เช่น GitHub Pages) ดึงผ่าน Web App URL
+            const webAppUrl = "https://script.google.com/macros/s/AKfycbxUyW-3CGkfR7mAYJXr2Jq4gmZ1AtFluKiaGHvGCInsLxtAOs4bYQPQUWb4T2xg91KR/exec";
             
             fetch(webAppUrl + "?code=" + encodeURIComponent(code))
               .then(response => response.json())
               .then(data => {
-                // อัปเดตข้อมูลที่ส่งกลับมาเป็น HTML หรือ JSON Object { html: '...' }
                 if (data && data.html) {
                   updateData(data.html);
                 } else if (typeof data === 'string') {
                   updateData(data);
                 } else {
-                  fallbackSearch(code); // ใช้ข้อมูลจำลองถ้าข้อมูลไม่มีรูปแบบที่ระบุ
+                  fallbackSearch(code);
                 }
               })
               .catch(error => {
                 console.error("Fetch Error: ", error);
-                // หากติดปัญหา CORS หรือเข้าถึงเซิร์ฟเวอร์ไม่ได้ ให้รันตัวทดสอบจำลอง (Mockup) ด้านล่าง
                 fallbackSearch(code);
               });
           }
         }
       }
 
+      // แสดงหน้าตาการแจ้งเตือนพรีเมียมเมื่อไม่พบข้อมูล
+      function updateNotFound() {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: 'ไม่พบข้อมูลของคุณ',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        
+        // สร้างกรอบข้อความแจ้งเตือน "ไม่พบข้อมูล 🔍❌" ให้มีความทันสมัยและสวยงามแทนภาพที่ลิงก์เสีย
+        const notFoundHtml = `
+          <div class="card p-4 border-0 shadow-sm text-center" style="border-radius: 15px; background: #fff;">
+            <div class="py-4">
+              <span class="display-3 text-danger"><i class="fas fa-exclamation-circle"></i></span>
+              <h4 class="mt-3 text-dark fw-bold">ไม่พบข้อมูล 🔍❌</h4>
+              <p class="text-muted mb-0">กรุณาตรวจสอบหมายเลขผู้ใช้ไฟฟ้า หรือหมายเลขมิเตอร์ใหมู่อีกครั้ง</p>
+            </div>
+          </div>
+        `;
+        document.getElementById("search").innerHTML = notFoundHtml;
+        $('#search-btn').show()
+        $('#btn2').hide()
+        if (M && M.updateTexfields) M.updateTexfields();
+      }
+
       function updateData(data) {
-        if(data == '<center>*ไม่พบข้อมูล<br><img src="https://ltschool.web.app/pic/falseok.gif" width="200" height="200"></center>'){
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: 'ไม่พบข้อมูลของคุณ',
-            showConfirmButton: false,
-            timer: 1500
-          });
-          document.getElementById("search").innerHTML = data;
-          $('#search-btn').show()
-          $('#btn2').hide()
-          if (M && M.updateTexfields) M.updateTexfields();
+        // ตรวจจับคีย์เวิร์ด "ไม่พบข้อมูล" จากระบบเดิม
+        if (!data || data.includes('ไม่พบข้อมูล')) {
+          updateNotFound();
         } else {
           Swal.fire({
             position: 'center',
