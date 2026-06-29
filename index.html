@@ -41,6 +41,9 @@
 
     body {
       font-family: 'Sarabun' !important;
+      background-color: #f8f9fa; /* สีเริ่มต้น */
+      transition: background-color 0.5s ease; /* ทำให้เปลี่ยนสีพื้นหลังนุ่มนวล */
+      min-height: 100vh;
     }
 
     ::placeholder {
@@ -80,6 +83,49 @@
         transform: rotate(360deg);
       }
     }
+
+    /* สไตล์ปุ่มเลือกสีพาสเทล */
+    .color-picker-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .color-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid white;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+    }
+    .color-btn:hover {
+      transform: scale(1.2);
+    }
+    .bg-pink { background-color: #fce4ec; }
+    .bg-blue { background-color: #e3f2fd; }
+    .bg-green { background-color: #e8f5e9; }
+    .bg-yellow { background-color: #fffde7; }
+    .bg-purple { background-color: #f3e5f5; }
+    .bg-default { background-color: #f8f9fa; }
+
+    /* ปุ่มแนะนำตัวพรีเมียม */
+    .btn-intro {
+      background-color: white;
+      color: #74045f;
+      border: 2px solid #74045f;
+      border-radius: 20px;
+      padding: 6px 22px;
+      font-weight: bold;
+      transition: all 0.3s;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .btn-intro:hover {
+      background-color: #74045f;
+      color: white;
+      transform: translateY(-2px);
+    }
   </style>
 
 </head>
@@ -96,14 +142,13 @@
 <!---------------------ปิดส่วนหัวเว็บ--------------------------->
 
 <!---------------------เปิดส่วนของช่องค้นหา--------------------->
-
   <div class="container">
     <div class="row">
         <div class="col-md-6 mx-auto">
-          <div class="card text-center">
-              <div class="card border-blue-500">
-                <div class="card-body" style="box-shadow: 0 10px 10px rgb(0 0 0 / 10%);">
-                  <input class="form-control form-control-lg" type="text" id="idMeter" style="text-align: center;" placeholder="กรอกหมายเลขผู้ใช้ไฟฟ้า 11หลัก หรือหมายเลขมิเตอร์" maxlength="12" required>
+          <div class="card text-center border-0 shadow-sm" style="border-radius: 20px;">
+              <div class="card border-blue-500" style="border-radius: 20px; border: none;">
+                <div class="card-body" style="box-shadow: 0 10px 10px rgb(0 0 0 / 10%); border-radius: 20px;">
+                  <input class="form-control form-control-lg" type="text" id="idMeter" style="text-align: center; border-radius: 15px;" placeholder="กรอกหมายเลขผู้ใช้ไฟฟ้า 11หลัก หรือหมายเลขมิเตอร์" maxlength="12" required>
                   <div id="output" class="mt-3"></div>
                 </div>
             </div>
@@ -113,10 +158,10 @@
       <div class="row">
         <div class="col-md-6 mx-auto">
           <center>
-            <button type="button" class="btn bd-blue-500 btn-lg text-white mt-3" id="search-btn" onclick="findCode()" style="visibility: visible;box-shadow: 0 10px 10px rgb( 0 0 / 10%); background-image: linear-gradient(to right top, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b);">
+            <button type="button" class="btn bd-blue-500 btn-lg text-white mt-3" id="search-btn" onclick="findCode()" style="visibility: visible;box-shadow: 0 10px 10px rgb(0 0 / 10%); background-image: linear-gradient(to right top, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b, #c7911b); border-radius: 30px; padding-left: 40px; padding-right: 40px;">
               <i class="fas fa-search"></i> ค้นหา</button>
 
-          <button class="btn bd-orange-500 mt-3 btn-lg" type="button" disabled id="btn2" style="display:none">
+          <button class="btn bd-orange-500 mt-3 btn-lg" type="button" disabled id="btn2" style="display:none; border-radius: 30px;">
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             กำลังค้นหา
           </button>
@@ -132,20 +177,40 @@
     
       <div id="showData"></div>
   </div>
-
 <!-------------------ปิดส่วนของช่องค้นหา----------------------->
 
 
 <!-------------------- เปิด footer ------------------------->
-
 <div class="container mb-3">
     <nav class="navbar navbar-expand-lg navbar-dark bd-blue-500" style="border-radius: 25px; box-shadow: 0 10px 10px rgb(0 0 0 / 10%); background-image: linear-gradient(to right top, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f, #74045f);">     
         <a class="navbar-brand"></a>  
         <span class="navbar-brand flex-grow-1 text-center" style="font-size: 100%"> © Copyright 2025 (V.3): PEA Buachet</span>
     </nav> 
 </div>
-
 <!--------------------- ปิด footer --------------------->
+
+
+<!------------------ ส่วนแนะนำตัวผู้พัฒนา และ ธีมสี (ด้านล่างสุด) ------------------>
+<div class="container text-center mb-5 mt-4">
+    <!-- ปุ่มแนะนำตัวผู้พัฒนา -->
+    <div class="mb-3">
+        <button class="btn btn-intro" onclick="showIntro()">
+            <i class="fas fa-user-circle"></i> แนะนำตัวผู้พัฒนา
+        </button>
+    </div>
+
+    <!-- ส่วนปุ่มเลือกสีพื้นหลังพาสเทล -->
+    <div class="color-picker-container">
+        <small class="text-muted mt-1 me-2">ธีมสีพาสเทล:</small>
+        <div class="color-btn bg-default" onclick="changeBg('#f8f9fa')" title="สีเริ่มต้น"></div>
+        <div class="color-btn bg-pink" onclick="changeBg('#fce4ec')" title="พาสเทลชมพู"></div>
+        <div class="color-btn bg-blue" onclick="changeBg('#e3f2fd')" title="พาสเทลฟ้า"></div>
+        <div class="color-btn bg-green" onclick="changeBg('#e8f5e9')" title="พาสเทลเขียว"></div>
+        <div class="color-btn bg-yellow" onclick="changeBg('#fffde7')" title="พาสเทลเหลือง"></div>
+        <div class="color-btn bg-purple" onclick="changeBg('#f3e5f5')" title="พาสเทลม่วง"></div>
+    </div>
+</div>
+
 
     <!-- Mock API Data สำหรับแสดงตัวอย่าง/กรณีฉุกเฉิน -->
     <script>
@@ -160,26 +225,58 @@
         ]
       ];
 
+      // ฟังก์ชันเปลี่ยนสีพื้นหลังและเก็บค่าไว้ในเครื่อง
+      function changeBg(color) {
+          document.body.style.backgroundColor = color;
+          localStorage.setItem('userThemeColor', color);
+      }
+
+      // ดึงสีที่เคยเลือกไว้เมื่อเปิดหน้าเว็บ
+      $(document).ready(function() {
+          const savedColor = localStorage.getItem('userThemeColor');
+          if (savedColor) {
+              changeBg(savedColor);
+          }
+      });
+
+      // ฟังก์ชันแสดงประวัติแนะนำตัวผู้พัฒนา
+      function showIntro() {
+          if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                  title: '<strong>ผู้พัฒนาระบบ</strong>',
+                  icon: 'info',
+                  html:
+                    '<h5 class="fw-bold mb-2">นายปรีชา ผาผล ตำหแน่ง พชง.5 สังกัด กฟส.บัวเชด /กฟส.สังขะ/กฟส.ปส./กฟจ.สร./กฟฉ.3/สายงาน (ฉ)</h5>' +
+                    '<p class="mb-3">เหตุผลที่อยากเข้า DevPool : อยากพัฒนาตนเอง อยากเรียนรู้งานด้านระบบ Code,เว็ป ระดับองค์กร การเขียน Code หลากหลายหน้า เพื่อที่จะมาช่วยงานวิธีปฏิบัติงานให้ง่ายยิ่งขึ้น (เคยเข้าร่วมเมื่อครั้งก่อนแล้ว แต่ไม่มีความสามารถในการเขียนเว็ป)</p>' +
+                    '<hr>' +
+                  showCloseButton: true,
+                  focusConfirm: false,
+                  confirmButtonText: '<i class="fa fa-thumbs-up"></i> รับทราบ',
+                  confirmButtonColor: '#74045f'
+              });
+          }
+      }
+
       // ฟังก์ชันค้นหาข้อมูลจำลอง (Fallback)
       function fallbackSearch(code) {
         let foundData = mockDatabase.filter(row => row[2] === code || row[3] === code);
         if (foundData.length > 0) {
           let r = foundData[0];
           let htmlResult = `
-            <div class="card p-4 border-0 shadow-sm" style="border-radius: 15px; background: #fff;">
+            <div class="card p-4 border-0 shadow" style="border-radius: 20px; background: #fff;">
               <div class="table-responsive">
                 <table class="table table-borderless align-middle text-center mb-0">
                   <tbody class="text-dark">
                     <tr><td colspan="12"><b>สายจดหน่วย :</b> ${r[0] || '-'}</td></tr> 
                     <tr><td colspan="12"><b>ลำดับ จน. :</b> ${r[1] || '-'}</td></tr> 
-                    <tr><td colspan="12"><span class="badge bg-purple p-2 text-white" style="background-color: #74045f;"><b>หมายเลขผู้ใช้ไฟ :</b> ${r[2] || '-'}</span></td></tr>
+                    <tr><td colspan="12"><span class="badge p-2 px-3 text-white" style="background-color: #74045f; border-radius: 10px;"><b>หมายเลขผู้ใช้ไฟ :</b> ${r[2] || '-'}</span></td></tr>
                     <tr><td colspan="12"><b>หมายเลข PEA มิเตอร์ :</b> ${r[3] || '-'}</td></tr>
                     <tr><td colspan="12"><b>ขนาดมิเตอร์ :</b> ${r[4] || '-'}</td></tr>
                     <tr><td colspan="12"><b>เฟส สาย โวลต์ / แรงดัน :</b> ${r[5] || '-'}</td></tr>
                     <tr><td colspan="12"><b>เฟส :</b> ${r[6] || '-'}</td></tr>
                     <tr><td colspan="12"><b>ประเภทอัตรา :</b> ${r[7] || '-'}</td></tr>
                     <tr><td colspan="12"><b>สถานที่ :</b> ${r[8] || '-'}</td></tr>
-                    <tr><td colspan="12" class="pt-3"><b>GPS : </b><a href="${r[9] || '#'}" target="_blank" class="btn btn-sm btn-success px-4" style="border-radius: 20px;"><i class="fas fa-map-marker-alt"></i> คลิกดูพิกัด</a></td></tr>
+                    <tr><td colspan="12" class="pt-3"><a href="${r[9] || '#'}" target="_blank" class="btn btn-success px-4" style="border-radius: 20px;"><i class="fas fa-map-marker-alt"></i> คลิกดูพิกัด GPS</a></td></tr>
                   </tbody>
                 </table>
               </div>
@@ -216,7 +313,7 @@
         $('#btn2').show()
 
         if(document.getElementById('idMeter').value == "" ){
-          document.getElementById("output").innerHTML = "<div class='alert alert-danger' role='alert'>กรุณาพิมพ์หมายเลขมิเตอร์</div>";
+          document.getElementById("output").innerHTML = "<div class='alert alert-danger' role='alert' style='border-radius:15px;'>กรุณาพิมพ์หมายเลขมิเตอร์</div>";
           setTimeout(function(){
             document.getElementById('output').innerHTML= ""; 
           }, 1500);  
@@ -264,7 +361,7 @@
         
         // สร้างกรอบข้อความแจ้งเตือน "ไม่พบข้อมูล 🔍❌" ให้มีความทันสมัยและสวยงามแทนภาพที่ลิงก์เสีย
         const notFoundHtml = `
-          <div class="card p-4 border-0 shadow-sm text-center" style="border-radius: 15px; background: #fff;">
+          <div class="card p-4 border-0 shadow-sm text-center" style="border-radius: 20px; background: #fff;">
             <div class="py-4">
               <span class="display-3 text-danger"><i class="fas fa-exclamation-circle"></i></span>
               <h4 class="mt-3 text-dark fw-bold">ไม่พบข้อมูล 🔍❌</h4>
@@ -291,9 +388,9 @@
             Swal.fire({
               position: 'center',
               icon: 'success',
-              title: 'ยินดีด้วยพบข้อมูลแล้ว',
+              title: 'พบข้อมูลเรียบร้อยแล้ว',
               showConfirmButton: false,
-              timer: 2000
+              timer: 1500
             });
           }
           document.getElementById('idMeter').value = ''
