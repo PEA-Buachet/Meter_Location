@@ -239,23 +239,6 @@
           }
       });
 
-      // ฟังก์ชันแสดงประวัติแนะนำตัวผู้พัฒนา
-      function showIntro() {
-          if (typeof Swal !== 'undefined') {
-              Swal.fire({
-                  title: '<strong>ผู้พัฒนาระบบ</strong>',
-                  icon: 'info',
-                  html:
-                    '<h5 class="fw-bold mb-2" style="font-size: 16px;">นายปรีชา ผาผล ตำแหน่ง พชง.5 สังกัด กฟส.บัวเชด /กฟส.สังขะ/กฟส.ปส./กฟจ.สร./กฟฉ.3/สายงาน (ฉ)</h5>' +
-                    '<hr>' +
-                    '<p class="mb-3" style="font-size: 14px; text-align: left; text-indent: 20px; line-height: 1.6;"><b>เหตุผลที่อยากเข้า DevPool :</b> อยากพัฒนาตนเอง อยากเรียนรู้งานด้านระบบ Code, เว็ป ระดับองค์กร การเขียน Code หลากหลายหน้า เพื่อที่จะมาช่วยงานวิธีปฏิบัติงานให้ง่ายยิ่งขึ้น (เคยเข้าร่วมเมื่อครั้งก่อนแล้ว แต่ไม่มีความสามารถในการเขียนเว็ป)</p>',
-                  showCloseButton: true,
-                  focusConfirm: false,
-                  confirmButtonText: '<i class="fa fa-thumbs-up"></i> รับทราบ',
-                  confirmButtonColor: '#74045f'
-              });
-          }
-      }
 
       // ฟังก์ชันค้นหาข้อมูลจำลอง (Fallback)
       function fallbackSearch(code) {
